@@ -22,7 +22,7 @@ src/types.ts             BattleDefinition schema — the contract for everything
 src/data/<battle>.ts     One battle = one data file (ilium, luna, ladon, phobos)
 src/data/index.ts        Battle registry (imported by App's selector) — add new battles here
 src/engine/timeline.ts   Pure functions: position/strength of any unit, whereabouts of any character, at time t
-src/components/          MapCanvas (canvas map), TimelineControls, EventLog, InfoPanel
+src/components/          MapCanvas (canvas map), TimelineControls, EventLog, InfoPanel, CharacterRoster
 src/App.tsx              Shell + playback loop + battle selector + selection/follow state
 docs/                    Research knowledge base (see below)
 ```
@@ -32,6 +32,7 @@ docs/                    Research knowledge base (see below)
 - **Characters** (`battle.characters`) have time-phased whereabouts (`phases`: from-hour + unitId or off-map note + status active/off-map/dead/captured/withdrawn). They render as initial-letter badges fanned above their unit, are clickable, and can be **followed** (gold reticle + starred events via `event.characterIds`). Characters relevant to the story but absent from the battlefield get `status: 'off-map'` phases with a note — the UI tells the user where they are instead.
 - Map features with a `description` are clickable (kinds: city, landmark, planet, moon, station).
 - `MapCanvas` renders features by `kind`, then hazards, then units, then character badges, then event pulses. Playback rate auto-scales so any battle plays in ~35 s at 1×; clocks switch to Day N · HHh for battles > 72 h.
+- **Layout:** desktop = map + player left, with the InfoPanel (overview/selection detail) below the player; sticky right sidebar = battle log + CharacterRoster. Mobile (≤900px — keep in sync with `MOBILE_QUERY` in App.tsx) = sticky map/player on top, log + roster scrolling beneath, InfoPanel in a slide-up sheet (ⓘ header button opens the overview).
 - Known TODO: pan/zoom; casualty graphs; unit filtering.
 
 ## Adding a battle

@@ -1,4 +1,4 @@
-import type { BattleDefinition, Character, Selection } from '../types'
+import type { BattleDefinition, Selection } from '../types'
 import { FACTION_COLORS } from '../types'
 import {
   strengthAt,
@@ -6,9 +6,9 @@ import {
   characterPhaseAt,
   characterPositionAt,
   charactersWithUnit,
-  formatTime,
   isActive,
 } from '../engine/timeline'
+import { CharacterChips } from './CharacterRoster'
 
 interface Props {
   battle: BattleDefinition
@@ -19,43 +19,6 @@ interface Props {
   onFollow: (id: string | null) => void
   /** Override for the "← battle overview" button (mobile sheet keeps itself open). */
   onBack?: () => void
-}
-
-function statusIcon(battle: BattleDefinition, c: Character, t: number): string {
-  const phase = characterPhaseAt(c, t)
-  if (phase.status === 'dead') return '☠'
-  if (phase.status === 'captured') return '⛓'
-  if (phase.status === 'withdrawn') return '↩'
-  return characterPositionAt(c, battle, t) ? '●' : '○'
-}
-
-function CharacterChips({
-  battle,
-  t,
-  chars,
-  onSelect,
-}: {
-  battle: BattleDefinition
-  t: number
-  chars: Character[]
-  onSelect: (sel: Selection) => void
-}) {
-  return (
-    <div className="roster">
-      {chars.map((c) => (
-        <button
-          key={c.id}
-          className="char-chip"
-          style={{ borderColor: FACTION_COLORS[c.faction] + '88' }}
-          onClick={() => onSelect({ type: 'character', id: c.id })}
-          title={c.role}
-        >
-          <span className="char-status">{statusIcon(battle, c, t)}</span>
-          {c.name}
-        </button>
-      ))}
-    </div>
-  )
 }
 
 export default function InfoPanel({ battle, t, selected, followId, onSelect, onFollow, onBack }: Props) {
@@ -173,7 +136,7 @@ export default function InfoPanel({ battle, t, selected, followId, onSelect, onF
           {riders.length > 0 && (
             <>
               <h4 className="section-head">With this formation now</h4>
-              <CharacterChips battle={battle} t={t} chars={riders} onSelect={onSelect} />
+              <CharacterChips battle={battle} t={t} chars={riders} followId={followId} onSelect={onSelect} />
             </>
           )}
         </div>
@@ -189,24 +152,18 @@ export default function InfoPanel({ battle, t, selected, followId, onSelect, onF
         {battle.date} · {battle.location}
       </p>
       <p>{battle.summary}</p>
-      {(['republic', 'society'] as const).map((f) => (
-        <div key={f} className="faction-block">
-          <h4>
-            <span className="chip" style={{ background: battle.factions[f].color }} />
-            {battle.factions[f].name}
-          </h4>
-          <p className="dim">{battle.factions[f].totalStrength}</p>
-          <p className="commanders">{battle.factions[f].commanders.join(' · ')}</p>
-        </div>
-      ))}
-      {battle.characters.length > 0 && (
-        <>
-          <h4 className="section-head">
-            Characters <span className="dim">(click one to inspect &amp; follow · {formatTime(t, battle.durationHours)})</span>
-          </h4>
-          <CharacterChips battle={battle} t={t} chars={battle.characters} onSelect={onSelect} />
-        </>
-      )}
+      <div className="faction-row">
+        {(['republic', 'society'] as const).map((f) => (
+          <div key={f} className="faction-block">
+            <h4>
+              <span className="chip" style={{ background: battle.factions[f].color }} />
+              {battle.factions[f].name}
+            </h4>
+            <p className="dim">{battle.factions[f].totalStrength}</p>
+            <p className="commanders">{battle.factions[f].commanders.join(' · ')}</p>
+          </div>
+        ))}
+      </div>
       <p className="fidelity">{battle.fidelityNote}</p>
     </div>
   )

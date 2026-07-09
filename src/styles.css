@@ -72,6 +72,13 @@ h1 {
   align-items: start;
 }
 
+.left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
 .map-wrap {
   display: flex;
   flex-direction: column;
@@ -154,12 +161,12 @@ h1 {
   min-height: 0;
 }
 
-/* battle log keeps its natural height; the info panel scrolls inside what's left */
+/* battle log keeps its natural height; the character roster scrolls inside what's left */
 .sidebar .event-log {
   flex: 0 0 auto;
 }
 
-.sidebar .info-panel {
+.sidebar .roster-panel {
   flex: 0 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -323,6 +330,51 @@ footer {
   font-size: 11px;
   text-align: center;
   padding: 8px 0 4px;
+}
+
+/* ————— character roster panel ————— */
+
+.roster-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.roster-panel h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+
+.roster-hint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.char-chip.following {
+  background: #fbbf2418;
+}
+
+.char-chip.following .char-status {
+  color: #fbbf24;
+}
+
+/* overview panel sits at map width now — factions go side by side */
+.faction-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+@media (max-width: 900px) {
+  .faction-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ————— characters ————— */
@@ -501,6 +553,11 @@ footer {
     gap: 8px;
   }
 
+  /* let map-wrap stick against the page, not the (map-only) left column */
+  .left-col {
+    display: contents;
+  }
+
   /* map + player pinned while the battle log scrolls beneath */
   .map-wrap {
     position: sticky;
@@ -531,7 +588,7 @@ footer {
     max-height: none;
   }
 
-  .sidebar .info-panel {
+  .sidebar .roster-panel {
     overflow-y: visible;
   }
 

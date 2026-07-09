@@ -5,6 +5,7 @@ import MapCanvas from './components/MapCanvas'
 import TimelineControls from './components/TimelineControls'
 import EventLog from './components/EventLog'
 import InfoPanel from './components/InfoPanel'
+import CharacterRoster from './components/CharacterRoster'
 
 /** Every battle plays end-to-end in ~35 real seconds at 1× speed. */
 const PLAYTHROUGH_SECONDS = 35
@@ -129,23 +130,26 @@ export default function App() {
         </span>
       </header>
       <div className="main">
-        <div className="map-wrap">
-          <MapCanvas
-            battle={battle}
-            t={t}
-            selected={selected}
-            followId={followId}
-            onSelect={handleSelect}
-          />
-          <TimelineControls
-            battle={battle}
-            t={t}
-            playing={playing}
-            speed={speed}
-            onSeek={(v) => setT(v)}
-            onTogglePlay={() => setPlaying((p) => (t >= battle.durationHours ? (setT(0), true) : !p))}
-            onSpeed={setSpeed}
-          />
+        <div className="left-col">
+          <div className="map-wrap">
+            <MapCanvas
+              battle={battle}
+              t={t}
+              selected={selected}
+              followId={followId}
+              onSelect={handleSelect}
+            />
+            <TimelineControls
+              battle={battle}
+              t={t}
+              playing={playing}
+              speed={speed}
+              onSeek={(v) => setT(v)}
+              onTogglePlay={() => setPlaying((p) => (t >= battle.durationHours ? (setT(0), true) : !p))}
+              onSpeed={setSpeed}
+            />
+          </div>
+          {!isMobile && infoPanel}
         </div>
         <aside className="sidebar">
           <EventLog
@@ -157,7 +161,7 @@ export default function App() {
               setPlaying(false)
             }}
           />
-          {!isMobile && infoPanel}
+          <CharacterRoster battle={battle} t={t} followId={followId} onSelect={handleSelect} />
         </aside>
       </div>
       {isMobile && sheetOpen && (
