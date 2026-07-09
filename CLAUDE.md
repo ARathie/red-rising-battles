@@ -13,6 +13,8 @@ npm run build      # tsc --strict type-check + production build (this is the CI 
 npm run preview    # serve the production build
 ```
 
+**Deployment:** every push to `main` auto-deploys to GitHub Pages via `.github/workflows/deploy.yml` → https://arathie.github.io/red-rising-battles/. The workflow builds with `VITE_BASE=/red-rising-battles/` (local dev stays at `/`). The site is an installable PWA (`vite-plugin-pwa`, manifest + icons in `public/`); the service worker precaches the bundle, so bump nothing — updates roll out automatically on deploy.
+
 No test suite yet. **Verification standard:** `npm run build` must pass, and for any change touching rendering or data, drive the app in a real browser — load it, press play, scrub to a mid-battle timestamp, and confirm units move, hazards render, and the battle log populates. In Claude Code remote environments, Chromium is preinstalled at `/opt/pw-browsers/chromium`; use `playwright-core` with `executablePath: '/opt/pw-browsers/chromium'` (never `playwright install`). Watch the console: zero errors expected.
 
 ## Architecture

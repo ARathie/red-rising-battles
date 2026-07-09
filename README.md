@@ -1,5 +1,7 @@
 # Red Rising Battles
 
+**Live at [arathie.github.io/red-rising-battles](https://arathie.github.io/red-rising-battles/)** — works on desktop and mobile, and can be installed to your home screen (Add to Home Screen / the install prompt) where it runs fullscreen like a native app, even offline.
+
 Interactive digital recreations of the major battles of Pierce Brown's **Red Rising** saga.
 
 Each battle is a **data file** (typed TypeScript, no engine changes needed) replayed by a shared viewer: a tactical map (terrain **or deep space**) with animated unit movements, a scrubbable timeline, an annotated battle log, clickable units/characters/places, and a **character-follow mode** that tracks a named commander through the fight — and tells you when someone pivotal isn't on this battlefield at all.
@@ -63,6 +65,7 @@ Contributor/agent instructions (build, verify, fidelity policy, research workflo
 - [x] **The Fall of Luna** (Nov 743) — fleet + citadel assault
 - [x] **Siege of Phobos** (Nov–Dec 754) — 13-day station siege
 - [x] Battle selector, clickable characters/places, character-follow mode, off-map character notices
+- [x] Published: GitHub Pages auto-deploy + installable PWA (offline-capable)
 - [ ] Unit filtering, casualty graphs over time, phase chapters
 - [ ] Camera pan/zoom on the map
 - [ ] More battles from the compendium: Battle of Caliban, the Long Night, Lion's Rain, Battle of Deimos…
