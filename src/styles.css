@@ -51,6 +51,20 @@ h1 {
   font-size: 14px;
 }
 
+.battle-select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.battle-select:hover {
+  border-color: var(--accent);
+}
+
 .main {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -103,7 +117,7 @@ h1 {
 .clock {
   font-variant-numeric: tabular-nums;
   font-size: 13px;
-  min-width: 62px;
+  min-width: 72px;
 }
 
 .dim {
@@ -299,4 +313,132 @@ footer {
   font-size: 11px;
   text-align: center;
   padding: 8px 0 4px;
+}
+
+/* ————— characters ————— */
+
+.section-head {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+
+.section-head .dim {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.roster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.char-chip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 2px 9px 2px 7px;
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.char-chip:hover {
+  background: #1c2129;
+}
+
+.char-status {
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.whereabouts {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+}
+
+.whereabouts.offmap {
+  color: var(--dim);
+  font-style: italic;
+}
+
+.whereabouts.dead {
+  border-color: #f8717155;
+  color: #fca5a5;
+}
+
+.whereabouts.captured {
+  border-color: #fbbf2455;
+  color: #fcd34d;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #93c5fd;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-btn:hover {
+  color: #bfdbfe;
+}
+
+.follow-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid #fbbf2477;
+  color: #fbbf24;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12.5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.follow-btn:hover {
+  background: #fbbf2418;
+}
+
+.follow-btn.active {
+  background: #fbbf2422;
+  border-color: #fbbf24;
+}
+
+.small {
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.follow-note {
+  color: #fbbf24;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.event.follow-hit {
+  border-left-color: #fbbf24;
+}
+
+.follow-star {
+  color: #fbbf24;
 }

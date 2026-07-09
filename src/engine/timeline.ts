@@ -1,4 +1,4 @@
-import type { Unit, Waypoint, StrengthPoint } from '../types'
+import type { Unit, Waypoint, StrengthPoint, Character, CharacterPhase, BattleDefinition } from '../types'
 
 export function isActive(unit: Unit, t: number): boolean {
   const from = unit.appearsAt ?? 0
@@ -44,10 +44,54 @@ export function strengthAt(unit: Unit, t: number): number {
   return last.value
 }
 
+/** The phase a character is in at battle hour `t` (clamped to the first phase before it starts). */
+export function characterPhaseAt(c: Character, t: number): CharacterPhase {
+  let cur = c.phases[0]
+  for (const p of c.phases) {
+    if (t >= p.from) cur = p
+    else break
+  }
+  return cur
+}
+
+/**
+ * Where a character is drawn at time `t`, or null if they are not on the map
+ * (off the battlefield, dead, captured, or their unit is gone).
+ */
+export function characterPositionAt(
+  c: Character,
+  battle: BattleDefinition,
+  t: number,
+): { x: number; y: number; unit: Unit } | null {
+  const phase = characterPhaseAt(c, t)
+  if (!phase.unitId) return null
+  if (phase.status === 'dead' || phase.status === 'captured' || phase.status === 'off-map') return null
+  const unit = battle.units.find((u) => u.id === phase.unitId)
+  if (!unit || !isActive(unit, t) || strengthAt(unit, t) <= 0) return null
+  const pos = positionAt(unit, t)
+  return { x: pos.x, y: pos.y, unit }
+}
+
+/** All characters riding with `unitId` at time `t`. */
+export function charactersWithUnit(battle: BattleDefinition, unitId: string, t: number): Character[] {
+  return battle.characters.filter((c) => {
+    const p = characterPhaseAt(c, t)
+    return p.unitId === unitId && p.status !== 'dead' && p.status !== 'captured' && p.status !== 'off-map'
+  })
+}
+
 export function formatHour(t: number): string {
   const h = Math.floor(t)
   const m = Math.floor((t - h) * 60)
   return `H+${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+}
+
+/** Hour clock for short battles, day+hour clock for multi-day sieges. */
+export function formatTime(t: number, durationHours: number): string {
+  if (durationHours <= 72) return formatHour(t)
+  const day = Math.floor(t / 24) + 1
+  const h = Math.floor(t % 24)
+  return `Day ${day} · ${String(h).padStart(2, '0')}h`
 }
 
 export function formatStrength(n: number): string {

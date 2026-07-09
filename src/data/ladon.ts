@@ -78,14 +78,16 @@ export const ladon: BattleDefinition = {
         ],
         labelAt: { x: 705, y: 605 },
       },
-      { id: 'tyche', name: 'Tyche', kind: 'city', points: [{ x: 285, y: 185 }] },
-      { id: 'heliopolis', name: 'Heliopolis', kind: 'city', points: [{ x: 560, y: 600 }] },
-      { id: 'red-reach', name: 'Red Reach (base)', kind: 'city', points: [{ x: 720, y: 240 }] },
-      { id: 'talarian', name: 'Talarian Peninsula', kind: 'landmark', points: [{ x: 350, y: 140 }] },
+      { id: 'tyche', name: 'Tyche', kind: 'city', points: [{ x: 285, y: 185 }], description: 'The richest city on Mercury and capital of Helios, on the Sycorax coast. Breached by the Ash Legions at H+12; a third of the city drowns under the kilometer-high tidal wave at H+14. Of the oceanfront, only the Water Colossus is left standing.' },
+      { id: 'heliopolis', name: 'Heliopolis', kind: 'city', points: [{ x: 560, y: 600 }], description: 'The City of the Sun — 20 million people behind a Storm Wall between the Hesperides and Aigle mountains. The anvil of the whole battle: X Pardus breaches it at H+24 and is butchered against its wall. It is all the Republic will hold on Helios two weeks from now.' },
+      { id: 'red-reach', name: 'Red Reach (base)', kind: 'city', points: [{ x: 720, y: 240 }], description: 'Republic Second Army base. Erased at H+2 by an omega-atomic fired from orbit — one million soldiers gone in a flash. (Canon figure.)' },
+      { id: 'talarian', name: 'Talarian Peninsula', kind: 'landmark', points: [{ x: 350, y: 140 }], description: 'The land bridge the Ash Legions storm to assault Tyche — and the shore the tidal wave rolls over when Orion exceeds the primary horizon.' },
       {
         id: 'gravloop',
         name: 'gravLoop (subterranean)',
         kind: 'route',
+        description:
+          'The subterranean maglev artery under the Hesperides linking Tyche to Heliopolis. 83,423+ civilians escape the drowning city through it while the Knights of Elysium hold the terminus.',
         points: [
           { x: 285, y: 185 }, { x: 380, y: 330 }, { x: 470, y: 480 }, { x: 560, y: 600 },
         ],
@@ -487,10 +489,198 @@ export const ladon: BattleDefinition = {
     },
   ],
 
+  characters: [
+    // ————— Republic —————
+    {
+      id: 'darrow',
+      name: 'Darrow of Lykos',
+      faction: 'republic',
+      role: 'ArchImperator (stripped of rank), Free Legions',
+      description:
+        'The Reaper commands the defense of Helios in defiance of the Senate that stripped his rank. He authorizes Operation Tartarus, leads the Drachenjäger ambush on the Plains of Caduceus where he cuts Scorpio au Votum in half, and makes the war\'s hardest call: using Glirastes\'s failsafe to kill Orion and stop a planetary extinction. Suffers a heart attack as victory lands.',
+      phases: [
+        { from: 0, unitId: 'hq-heliopolis', note: 'directing the defense from Heliopolis' },
+        { from: 5, unitId: 'legion-15', note: 'riding with the 15th to the Caduceus ambush' },
+        { from: 10, unitId: 'hq-heliopolis', note: 'back at the Heliopolis command — where he will kill Orion by remote failsafe at H+15' },
+      ],
+    },
+    {
+      id: 'orion',
+      name: 'Orion xe Aquarii',
+      faction: 'republic',
+      role: 'Navarch — mistress of the Storm Gods',
+      description:
+        'The Republic\'s greatest naval mind, broken by three weeks of Gorgon torture after the Battle of Caliban. She crews the Storm Gods over the Sycorax Sea — then drives them past the primary horizon toward an output that would scour Mercury clean. Darrow disconnects her with the failsafe; the disconnection kills her.',
+      phases: [
+        { from: 0, unitId: 'storm-gods-sycorax', note: 'crewing the Storm Gods with her Blues' },
+        { from: 15, status: 'dead', note: 'killed at H+15 when Darrow triggers Glirastes\'s kill-switch to stop the storm surge' },
+      ],
+    },
+    {
+      id: 'alexandar',
+      name: 'Alexandar au Arcos',
+      faction: 'republic',
+      role: 'Knight of Elysium — grandson of Lorn au Arcos',
+      description:
+        'Leads the 203 Knights of Elysium down the gravLoop to hold the Tyche terminus while 83,000+ civilians escape the drowned city. One of only nine knights to survive the stand. He falls a month later in the Long Night, in single combat with Lysander.',
+      phases: [
+        { from: 0, unitId: 'knights-elysium', note: 'with the knights at Heliopolis' },
+        { from: 22, unitId: 'hq-heliopolis', note: 'among the nine surviving knights, withdrawn to Heliopolis' },
+      ],
+    },
+    {
+      id: 'harnassus',
+      name: 'Cadus Harnassus',
+      faction: 'republic',
+      role: 'ArchLegate — Orange, Darrow\'s second',
+      description:
+        'The Free Legions\' senior engineer-general. Runs the Heliopolis defense grid, the Storm Wall, and the logistics of ten million stranded troops through all 39 hours.',
+      phases: [{ from: 0, unitId: 'hq-heliopolis' }],
+    },
+    {
+      id: 'thraxa',
+      name: 'Thraxa au Telemanus',
+      faction: 'republic',
+      role: 'Legate — Armored 15th Legion',
+      description:
+        'Telemanus muscle with a mech-jockey\'s heart. Fights the Caduceus ambush with the Drachenjägers and survives to escape Mercury after the Long Night.',
+      phases: [{ from: 0, unitId: 'legion-15' }],
+    },
+    {
+      id: 'colloway',
+      name: 'Colloway xe Char',
+      faction: 'republic',
+      role: 'Ace pilot — the Republic\'s deadliest stick',
+      description:
+        'Flies cover over Heliopolis through the hypercane. The books track his kill-count mythology rather than his sorties here; his squadron\'s movements are not given, so he is pinned to the Heliopolis garrison (reconstructed).',
+      phases: [{ from: 0, unitId: 'hq-heliopolis', note: 'flying combat air patrol over the Storm Wall (position reconstructed)' }],
+    },
+    {
+      id: 'glirastes',
+      name: 'Glirastes the Master Maker',
+      faction: 'republic',
+      role: 'Orange master engineer of Heliopolis (civilian)',
+      description:
+        'The greatest living Orange. Excavated and refit the Storm Gods for Operation Tartarus — and quietly built a kill-switch failsafe into the network, which is the only reason Darrow can stop Orion at H+15. His loyalties will curdle before the Long Night.',
+      phases: [{ from: 0, unitId: 'hq-heliopolis', note: 'in his workshops in Heliopolis' }],
+    },
+    // ————— Society —————
+    {
+      id: 'atalantia',
+      name: 'Atalantia au Grimmus',
+      faction: 'society',
+      role: 'Dictator of the Society Remnant',
+      description:
+        'The Ash Lord\'s surviving daughter commands the Ash Rain from the dreadnought Annihilo in low orbit — 30 million troops thrown at a continent. She fights the entire battle from orbit and never sets foot on Helios.',
+      phases: [{ from: 0, unitId: 'ash-armada', note: 'aboard the Annihilo' }],
+    },
+    {
+      id: 'ajax',
+      name: 'Ajax au Grimmus',
+      faction: 'society',
+      role: 'Legate — Legio X Pardus, Atalantia\'s favorite',
+      description:
+        'Storm Knight of the Society and commander of the double-strength Iron Leopards. Breaches the walls of Heliopolis at roughly hour 24 — then watches his elite legion be trapped and butchered against the Storm Wall when the Morning Star descends.',
+      phases: [
+        { from: 0, unitId: 'ash-armada', note: 'staging aboard the armada' },
+        { from: 5, unitId: 'x-pardus' },
+      ],
+    },
+    {
+      id: 'atlas',
+      name: 'Atlas au Raa',
+      faction: 'society',
+      role: 'Fear Knight — Legio Zero Pavor Nocturnus',
+      description:
+        'The architect of the door: his Gorgons spent months infiltrating Helios from hidden Hesperides bases, and their reactor sabotage collapses the northern shield chain at H-hour. He also holds Orion\'s torture on his ledger — the cruelty that becomes the tidal wave.',
+      phases: [{ from: 0, unitId: 'gorgons', note: 'running the Gorgon shadow war from the Hesperides' }],
+    },
+    {
+      id: 'lysander',
+      name: 'Lysander au Lune',
+      faction: 'society',
+      role: 'Heir of the House Lune — fighting to be believed',
+      description:
+        'Grandson of the last Sovereign, landing with the Ash Rain to prove himself. Survives the storm-shredded drop, crosses the Waste, and destroys the desert Storm God at H+20 — the feat that makes him a legend in the Society and costs Seraphina au Raa her life.',
+      phases: [
+        { from: 0, unitId: 'ash-armada', note: 'in the landing queues of the Ash Armada' },
+        { from: 1, unitId: 'ash-wave-1', note: 'down with the first wave, into the sandstorm' },
+        { from: 20.5, unitId: 'ash-wave-2', note: 'feted across Society comms after killing the Storm God' },
+      ],
+    },
+    {
+      id: 'seraphina',
+      name: 'Seraphina au Raa',
+      faction: 'society',
+      role: 'Rim observer — daughter of Romulus',
+      description:
+        'On Mercury as the Rim\'s eyes on the Core\'s war. Rides with Lysander\'s push against the desert Storm God and is killed by a railgun round in the assault — a death that will drag the Rim toward war.',
+      phases: [
+        { from: 0, unitId: 'ash-armada', note: 'observing for the Rim Dominion' },
+        { from: 1, unitId: 'ash-wave-1', note: 'in the Waste with Lysander' },
+        { from: 20.3, status: 'dead', note: 'killed by a railgun round in the assault on the desert Storm God (H+20)' },
+      ],
+    },
+    {
+      id: 'scorpio',
+      name: 'Scorpio au Votum',
+      faction: 'society',
+      role: 'Legate — Scorpion Legion, heir of House Votum',
+      description:
+        'Lands his Titan-spearheaded legion on the Plains of Caduceus expecting incomplete fortifications — and finds the Armored 15th waiting. His Titan stops two charging Drachenjägers with its gravity gun before Darrow cuts him in half.',
+      phases: [
+        { from: 0, unitId: 'ash-armada', note: 'staging aboard the armada' },
+        { from: 5.5, unitId: 'scorpion-legion' },
+        { from: 8.2, status: 'dead', note: 'bisected by Darrow in the Caduceus ambush (H+8)' },
+      ],
+    },
+    {
+      id: 'cicero',
+      name: 'Cicero au Votum',
+      faction: 'society',
+      role: 'Legate — House Votum',
+      description:
+        'Scorpio\'s brother, commanding Votum forces in the follow-on waves. Loses two siblings in one day — Scorpio to Darrow\'s razor, Ovidius and Porcia to the drowning of Tyche — and survives to carry the House.',
+      phases: [
+        { from: 0, unitId: 'ash-armada', note: 'staging aboard the armada' },
+        { from: 4, unitId: 'ash-wave-2', note: 'with the follow-on waves east of the storm' },
+      ],
+    },
+    // ————— relevant but not on this battlefield —————
+    {
+      id: 'virginia',
+      name: 'Virginia au Augustus',
+      faction: 'republic',
+      role: 'Sovereign of the Solar Republic',
+      description:
+        'The Sovereign is 200 million kilometers away on Luna, fighting the Senate and the Vox Populi for the reinforcements Mercury never gets. Within two weeks of this battle, the Day of Red Doves coup will take her capital out from under her.',
+      phases: [{ from: 0, status: 'off-map', note: 'on Luna, holding a fracturing Republic together — no relief fleet is coming' }],
+    },
+    {
+      id: 'sevro',
+      name: 'Sevro au Barca',
+      faction: 'republic',
+      role: 'Imperator — the Howlers',
+      description:
+        'Goblin is not on Mercury: after the Venus raid that killed the Ash Lord, he chose his family over the war and sailed for Luna with the Howlers. His absence from this battle is one of its quiet wounds.',
+      phases: [{ from: 0, status: 'off-map', note: 'returning to Luna with Victra and the Howlers — he chose home over Mercury' }],
+    },
+    {
+      id: 'victra',
+      name: 'Victra au Barca',
+      faction: 'republic',
+      role: 'Imperator — House Julii',
+      description:
+        'Sevro\'s wife and the Julii war-machine. Not at the Ladon — she extracted with Sevro toward Luna after Venus. Her absence, like his, is felt in every hour the Free Legions fight alone.',
+      phases: [{ from: 0, status: 'off-map', note: 'en route to Luna with Sevro — the Julii fleets are not in Mercury\'s sky' }],
+    },
+  ],
+
   events: [
     {
       t: 0,
       title: 'The shield chain falls',
+      characterIds: ['atlas'],
       kind: 'strategic',
       at: { x: 620, y: 300 },
       description:
@@ -499,6 +689,7 @@ export const ladon: BattleDefinition = {
     {
       t: 1,
       title: 'The Ash Rain begins',
+      characterIds: ['atalantia'],
       kind: 'strategic',
       at: { x: 500, y: 80 },
       description:
@@ -507,6 +698,7 @@ export const ladon: BattleDefinition = {
     {
       t: 2.1,
       title: 'Omega-atomic erases Red Reach',
+      characterIds: ['atalantia'],
       kind: 'catastrophe',
       at: { x: 720, y: 240 },
       description:
@@ -515,6 +707,7 @@ export const ladon: BattleDefinition = {
     {
       t: 3,
       title: 'Operation Tartarus',
+      characterIds: ['darrow', 'orion', 'glirastes'],
       kind: 'strategic',
       at: { x: 185, y: 115 },
       description:
@@ -523,6 +716,7 @@ export const ladon: BattleDefinition = {
     {
       t: 3.5,
       title: 'Landing waves shredded',
+      characterIds: ['lysander', 'seraphina'],
       kind: 'combat',
       at: { x: 520, y: 330 },
       description:
@@ -531,6 +725,7 @@ export const ladon: BattleDefinition = {
     {
       t: 7.5,
       title: 'Ambush on the Plains of Caduceus',
+      characterIds: ['darrow', 'thraxa', 'scorpio'],
       kind: 'combat',
       at: { x: 385, y: 445 },
       description:
@@ -539,6 +734,7 @@ export const ladon: BattleDefinition = {
     {
       t: 8.2,
       title: 'Titan versus Drachenjäger',
+      characterIds: ['darrow', 'scorpio'],
       kind: 'combat',
       at: { x: 385, y: 445 },
       description:
@@ -555,6 +751,7 @@ export const ladon: BattleDefinition = {
     {
       t: 14,
       title: 'Orion exceeds the primary horizon',
+      characterIds: ['orion'],
       kind: 'catastrophe',
       at: { x: 250, y: 140 },
       description:
@@ -563,6 +760,7 @@ export const ladon: BattleDefinition = {
     {
       t: 14.3,
       title: 'The drowning of Tyche',
+      characterIds: ['cicero'],
       kind: 'catastrophe',
       at: { x: 290, y: 183 },
       description:
@@ -571,6 +769,7 @@ export const ladon: BattleDefinition = {
     {
       t: 15,
       title: 'Darrow kills Orion',
+      characterIds: ['darrow', 'orion', 'glirastes'],
       kind: 'strategic',
       at: { x: 185, y: 115 },
       description:
@@ -587,6 +786,7 @@ export const ladon: BattleDefinition = {
     {
       t: 20,
       title: 'The Knights of Elysium hold the line',
+      characterIds: ['alexandar'],
       kind: 'heroic',
       at: { x: 295, y: 180 },
       description:
@@ -595,6 +795,7 @@ export const ladon: BattleDefinition = {
     {
       t: 20.3,
       title: 'Lysander destroys the desert Storm God',
+      characterIds: ['lysander', 'seraphina'],
       kind: 'combat',
       at: { x: 515, y: 320 },
       description:
@@ -603,6 +804,7 @@ export const ladon: BattleDefinition = {
     {
       t: 24,
       title: 'X Pardus breaches Heliopolis',
+      characterIds: ['ajax'],
       kind: 'combat',
       at: { x: 567, y: 588 },
       description:
@@ -619,6 +821,7 @@ export const ladon: BattleDefinition = {
     {
       t: 34,
       title: 'Slaughter at the Storm Wall',
+      characterIds: ['ajax'],
       kind: 'combat',
       at: { x: 560, y: 585 },
       description:
@@ -627,6 +830,7 @@ export const ladon: BattleDefinition = {
     {
       t: 39,
       title: 'Victory — at a price',
+      characterIds: ['darrow', 'harnassus'],
       kind: 'strategic',
       at: { x: 560, y: 600 },
       description:

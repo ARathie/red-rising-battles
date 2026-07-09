@@ -1,5 +1,5 @@
 import type { BattleDefinition } from '../types'
-import { formatHour } from '../engine/timeline'
+import { formatTime } from '../engine/timeline'
 
 interface Props {
   battle: BattleDefinition
@@ -27,17 +27,17 @@ export default function TimelineControls({
       <button className="play-btn" onClick={onTogglePlay}>
         {playing ? '⏸' : '▶'}
       </button>
-      <span className="clock">{formatHour(t)}</span>
+      <span className="clock">{formatTime(t, battle.durationHours)}</span>
       <input
         type="range"
         min={0}
         max={battle.durationHours}
-        step={0.05}
+        step={battle.durationHours / 800}
         value={t}
         onChange={(e) => onSeek(Number(e.target.value))}
         className="scrubber"
       />
-      <span className="clock dim">{formatHour(battle.durationHours)}</span>
+      <span className="clock dim">{formatTime(battle.durationHours, battle.durationHours)}</span>
       <div className="speeds">
         {SPEEDS.map((s) => (
           <button

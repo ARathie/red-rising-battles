@@ -1,32 +1,50 @@
 import { useEffect, useRef, useState } from 'react'
-import { ladon } from './data/ladon'
+import type { Selection } from './types'
+import { battles } from './data'
 import MapCanvas from './components/MapCanvas'
 import TimelineControls from './components/TimelineControls'
 import EventLog from './components/EventLog'
 import InfoPanel from './components/InfoPanel'
 
-const battle = ladon
-/** Battle-hours advanced per real second at 1× speed. */
-const BASE_RATE = 1.2
+/** Every battle plays end-to-end in ~35 real seconds at 1× speed. */
+const PLAYTHROUGH_SECONDS = 35
 
 export default function App() {
+  const [battleId, setBattleId] = useState(battles[0].id)
+  const battle = battles.find((b) => b.id === battleId) ?? battles[0]
+
   const [t, setT] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [speed, setSpeed] = useState(1)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selected, setSelected] = useState<Selection | null>(null)
+  const [followId, setFollowId] = useState<string | null>(null)
   const frame = useRef<number>(0)
   const lastTime = useRef<number | null>(null)
+
+  function switchBattle(id: string) {
+    setBattleId(id)
+    setT(0)
+    setPlaying(false)
+    setSelected(null)
+    setFollowId(null)
+  }
+
+  function follow(id: string | null) {
+    setFollowId(id)
+    if (id) setSelected({ type: 'character', id })
+  }
 
   useEffect(() => {
     if (!playing) {
       lastTime.current = null
       return
     }
+    const rate = battle.durationHours / PLAYTHROUGH_SECONDS
     const tick = (now: number) => {
       if (lastTime.current !== null) {
         const dt = (now - lastTime.current) / 1000
         setT((prev) => {
-          const next = prev + dt * BASE_RATE * speed
+          const next = prev + dt * rate * speed
           if (next >= battle.durationHours) {
             setPlaying(false)
             return battle.durationHours
@@ -39,7 +57,7 @@ export default function App() {
     }
     frame.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame.current)
-  }, [playing, speed])
+  }, [playing, speed, battle])
 
   return (
     <div className="app">
@@ -47,13 +65,31 @@ export default function App() {
         <h1>
           Red Rising <span className="accent">Battles</span>
         </h1>
+        <select
+          className="battle-select"
+          value={battleId}
+          onChange={(e) => switchBattle(e.target.value)}
+          aria-label="Choose battle"
+        >
+          {battles.map((b) => (
+            <option key={b.id} value={b.id}>
+              {b.name}
+            </option>
+          ))}
+        </select>
         <span className="subtitle">
-          {battle.name} — {battle.date}
+          {battle.date} — {battle.location}
         </span>
       </header>
       <div className="main">
         <div className="map-wrap">
-          <MapCanvas battle={battle} t={t} selectedId={selectedId} onSelect={setSelectedId} />
+          <MapCanvas
+            battle={battle}
+            t={t}
+            selected={selected}
+            followId={followId}
+            onSelect={setSelected}
+          />
           <TimelineControls
             battle={battle}
             t={t}
@@ -65,10 +101,18 @@ export default function App() {
           />
         </div>
         <aside className="sidebar">
-          <InfoPanel battle={battle} t={t} selectedId={selectedId} onClear={() => setSelectedId(null)} />
+          <InfoPanel
+            battle={battle}
+            t={t}
+            selected={selected}
+            followId={followId}
+            onSelect={setSelected}
+            onFollow={follow}
+          />
           <EventLog
             battle={battle}
             t={t}
+            followId={followId}
             onJump={(v) => {
               setT(v)
               setPlaying(false)

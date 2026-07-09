@@ -2,18 +2,24 @@
 
 Interactive digital recreations of the major battles of Pierce Brown's **Red Rising** saga.
 
-Each battle is a **data file** (typed TypeScript, no engine changes needed) replayed by a shared viewer: a tactical map with animated unit movements, a scrubbable ~39-hour timeline, an annotated battle log, and per-unit detail drawn from canon.
+Each battle is a **data file** (typed TypeScript, no engine changes needed) replayed by a shared viewer: a tactical map (terrain **or deep space**) with animated unit movements, a scrubbable timeline, an annotated battle log, clickable units/characters/places, and a **character-follow mode** that tracks a named commander through the fight — and tells you when someone pivotal isn't on this battlefield at all.
 
 > **Spoilers through *Light Bringer*.**
 
-## First battle: The Battle of the Ladon
+## The battles
 
-January 5–6, 754 PCE, continent of Helios, Mercury (*Dark Age*) — the richest engagement in the series:
+Pick one from the selector in the header:
 
-- Atalantia au Grimmus's **Ash Rain**: ~30 million troops in 40+ legions vs ~9–10 million stranded Free Legions
-- **Operation Tartarus** — seven ancient terraforming Storm Gods weaponized: five hypercanes, a continent-scale sandstorm, and the drowning of Tyche
-- The marquee **Drachenjäger vs Titan** mech engagement on the Plains of Caduceus
-- The Knights of Elysium's stand at the Tyche gravLoop, the *Morning Star*'s stormbreaker descent, and the slaughter at the Storm Wall
+- **Battle of Ilium** — Aug 19, 743 PCE, Jupiter (*Morning Star*). The best-documented fleet battle in the series: 112+ vs 80+ capital ships, the *Pax* sacrificed as a reactor-bomb fireship, clawDrills burrowing into the *Colossus*, Sevro's ambush from Thebe, and the secret run to the Ganymede Dockyards.
+- **The Fall of Luna** — Nov 4, 743 PCE (*Morning Star*). The Red Armada over Luna, the four-person infiltration of Octavia's bunker, the duel with Aja, the Jackal's 30-megaton bombs, and the *Lion of Mars* coming down on the Hysperia Gardens.
+- **The Battle of the Ladon** — Jan 5–6, 754 PCE, Mercury (*Dark Age*). The richest engagement in canon: the Ash Rain (~30M vs ~9–10M), Operation Tartarus and the weaponized Storm Gods, Drachenjäger vs Titan on the Plains of Caduceus, the drowning of Tyche, the Knights of Elysium's stand.
+- **Siege of Phobos** — Nov 20 – Dec 3, 754 PCE, Mars orbit (*Light Bringer*). A 13-day station siege: rail slugs fired from Earth a week in advance, empty destroyers used as battering rams, 200+ clawDrills, Virginia's escape through Bastion One, and a negotiated surrender.
+
+## Following the battle
+
+- **Click anything**: units, the character badges orbiting them, cities, moons, stations, landmarks — the info panel explains what you clicked at the current hour.
+- **Follow a character**: open any character (roster in the overview panel, or click their badge on the map) and hit *Follow*. A gold reticle tracks them between formations, and battle-log events they take part in get starred.
+- Characters who matter to the story but **aren't on this battlefield** (Virginia during the Ladon, Darrow during Phobos…) appear in the roster with an off-map note explaining where they are instead.
 
 ## Run it
 
@@ -27,14 +33,14 @@ npm run build    # type-check + production build
 
 ```
 src/
-├── types.ts              # BattleDefinition schema: units, waypoints, strengths, events, map features
-├── data/ladon.ts         # The Battle of the Ladon as data (add new battles here)
-├── engine/timeline.ts    # interpolation: position/strength of every unit at time t
+├── types.ts              # BattleDefinition schema: units, characters, waypoints, strengths, events, map features
+├── data/                 # one file per battle: ilium, luna, ladon, phobos (+ index.ts registry)
+├── engine/timeline.ts    # interpolation: position/strength of units & whereabouts of characters at time t
 └── components/
-    ├── MapCanvas.tsx     # canvas tactical map: terrain, units, hazards, event pulses
-    ├── TimelineControls.tsx  # play/pause/speed/scrub
-    ├── EventLog.tsx      # annotated battle log (click to jump)
-    └── InfoPanel.tsx     # battle overview / selected-unit detail
+    ├── MapCanvas.tsx     # canvas map: terrain or space mode, units, hazards, character badges, follow reticle
+    ├── TimelineControls.tsx  # play/pause/speed/scrub (day-aware clock for multi-day sieges)
+    ├── EventLog.tsx      # annotated battle log (click to jump; stars followed-character events)
+    └── InfoPanel.tsx     # overview / unit / character / place detail, follow toggle, off-map notices
 ```
 
 A battle = one `BattleDefinition` object: map features (seas, deserts, mountains, cities, routes), units with **waypoint paths** and **strength timelines** (linearly interpolated), and timestamped **events**. The viewer is battle-agnostic — recreating the next battle means writing one new data file.
@@ -53,11 +59,13 @@ Contributor/agent instructions (build, verify, fidelity policy, research workflo
 ## Roadmap
 
 - [x] Battle viewer engine + Battle of the Ladon
-- [ ] **Battle of Ilium** (Aug 743) — the great fleet battle: 115 vs 80 capital ships, the *Pax* fireship, clawDrill boarding (needs a space-battle map mode)
-- [ ] **The Fall of Luna** (Nov 743) — fleet + citadel assault
-- [ ] **Siege of Phobos** (Nov–Dec 754) — multi-Iron-Rain station siege
+- [x] **Battle of Ilium** (Aug 743) + space-battle map mode
+- [x] **The Fall of Luna** (Nov 743) — fleet + citadel assault
+- [x] **Siege of Phobos** (Nov–Dec 754) — 13-day station siege
+- [x] Battle selector, clickable characters/places, character-follow mode, off-map character notices
 - [ ] Unit filtering, casualty graphs over time, phase chapters
 - [ ] Camera pan/zoom on the map
+- [ ] More battles from the compendium: Battle of Caliban, the Long Night, Lion's Rain, Battle of Deimos…
 
 ## Legal
 
