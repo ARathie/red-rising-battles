@@ -17,6 +17,8 @@ interface Props {
   followId: string | null
   onSelect: (sel: Selection | null) => void
   onFollow: (id: string | null) => void
+  /** Override for the "← battle overview" button (mobile sheet keeps itself open). */
+  onBack?: () => void
 }
 
 function statusIcon(battle: BattleDefinition, c: Character, t: number): string {
@@ -56,9 +58,9 @@ function CharacterChips({
   )
 }
 
-export default function InfoPanel({ battle, t, selected, followId, onSelect, onFollow }: Props) {
+export default function InfoPanel({ battle, t, selected, followId, onSelect, onFollow, onBack }: Props) {
   const backBtn = (
-    <button className="back-btn" onClick={() => onSelect(null)}>
+    <button className="back-btn" onClick={onBack ?? (() => onSelect(null))}>
       ← battle overview
     </button>
   )

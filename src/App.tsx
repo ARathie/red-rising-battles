@@ -9,6 +9,20 @@ import InfoPanel from './components/InfoPanel'
 /** Every battle plays end-to-end in ~35 real seconds at 1× speed. */
 const PLAYTHROUGH_SECONDS = 35
 
+/** Matches the CSS mobile breakpoint in styles.css. */
+const MOBILE_QUERY = '(max-width: 900px)'
+
+function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY)
+    const onChange = (e: MediaQueryListEvent) => setMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return mobile
+}
+
 export default function App() {
   const [battleId, setBattleId] = useState(battles[0].id)
   const battle = battles.find((b) => b.id === battleId) ?? battles[0]
@@ -18,6 +32,9 @@ export default function App() {
   const [speed, setSpeed] = useState(1)
   const [selected, setSelected] = useState<Selection | null>(null)
   const [followId, setFollowId] = useState<string | null>(null)
+  /** Mobile only: the info panel lives in a slide-up sheet. */
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const isMobile = useIsMobile()
   const frame = useRef<number>(0)
   const lastTime = useRef<number | null>(null)
 
@@ -27,11 +44,26 @@ export default function App() {
     setPlaying(false)
     setSelected(null)
     setFollowId(null)
+    setSheetOpen(false)
+  }
+
+  function handleSelect(sel: Selection | null) {
+    setSelected(sel)
+    if (isMobile) setSheetOpen(sel !== null)
   }
 
   function follow(id: string | null) {
     setFollowId(id)
-    if (id) setSelected({ type: 'character', id })
+    if (id) {
+      setSelected({ type: 'character', id })
+      // on mobile, drop the sheet so the reticle is immediately visible
+      if (isMobile) setSheetOpen(false)
+    }
+  }
+
+  function openOverviewSheet() {
+    setSelected(null)
+    setSheetOpen(true)
   }
 
   useEffect(() => {
@@ -59,6 +91,18 @@ export default function App() {
     return () => cancelAnimationFrame(frame.current)
   }, [playing, speed, battle])
 
+  const infoPanel = (
+    <InfoPanel
+      battle={battle}
+      t={t}
+      selected={selected}
+      followId={followId}
+      onSelect={handleSelect}
+      onFollow={follow}
+      onBack={isMobile ? () => setSelected(null) : undefined}
+    />
+  )
+
   return (
     <div className="app">
       <header>
@@ -77,6 +121,9 @@ export default function App() {
             </option>
           ))}
         </select>
+        <button className="info-btn" onClick={openOverviewSheet}>
+          ⓘ Info &amp; characters
+        </button>
         <span className="subtitle">
           {battle.date} — {battle.location}
         </span>
@@ -88,7 +135,7 @@ export default function App() {
             t={t}
             selected={selected}
             followId={followId}
-            onSelect={setSelected}
+            onSelect={handleSelect}
           />
           <TimelineControls
             battle={battle}
@@ -101,14 +148,6 @@ export default function App() {
           />
         </div>
         <aside className="sidebar">
-          <InfoPanel
-            battle={battle}
-            t={t}
-            selected={selected}
-            followId={followId}
-            onSelect={setSelected}
-            onFollow={follow}
-          />
           <EventLog
             battle={battle}
             t={t}
@@ -118,8 +157,20 @@ export default function App() {
               setPlaying(false)
             }}
           />
+          {!isMobile && infoPanel}
         </aside>
       </div>
+      {isMobile && sheetOpen && (
+        <>
+          <div className="sheet-backdrop" onClick={() => setSheetOpen(false)} />
+          <div className="info-sheet" role="dialog" aria-label="Battle information">
+            <button className="sheet-close" onClick={() => setSheetOpen(false)}>
+              ✕ close
+            </button>
+            {infoPanel}
+          </div>
+        </>
+      )}
       <footer>
         An unofficial fan project. Red Rising © Pierce Brown — this recreation contains no book text;
         battle data compiled from the community wiki. Reconstructed positions/timing noted in-app.
