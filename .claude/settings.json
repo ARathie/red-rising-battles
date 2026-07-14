@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git rev-parse --git-dir >/dev/null 2>&1 && git config user.name 'Ash Rathie' && git config user.email 'ashwin.rathie@gmail.com' && git config commit.gpgsign false || true",
+            "statusMessage": "Setting git commit identity"
+          }
+        ]
+      }
+    ]
+  }
+}
