@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/red-rising-battles/sw.js', { scope: '/red-rising-battles/' })})}
