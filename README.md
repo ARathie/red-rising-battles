@@ -42,8 +42,11 @@ src/
     ├── MapCanvas.tsx     # canvas map: terrain or space mode, units, hazards, character badges, follow reticle
     ├── TimelineControls.tsx  # play/pause/speed/scrub (day-aware clock for multi-day sieges)
     ├── EventLog.tsx      # annotated battle log (click to jump; stars followed-character events)
-    └── InfoPanel.tsx     # overview / unit / character / place detail, follow toggle, off-map notices
+    ├── InfoPanel.tsx     # overview / unit / character / place detail, follow toggle, off-map notices
+    └── CharacterRoster.tsx  # clickable character chips with live status icons (sidebar / below the log on mobile)
 ```
+
+**Layout:** on desktop the battle log and character roster sit in a sticky right sidebar, always level with the map and player, and the info panel opens below the player. On mobile (≤900px) the map and player pin to the top of the screen, the log and roster scroll beneath, and details open in a slide-up sheet.
 
 A battle = one `BattleDefinition` object: map features (seas, deserts, mountains, cities, routes), units with **waypoint paths** and **strength timelines** (linearly interpolated), and timestamped **events**. The viewer is battle-agnostic — recreating the next battle means writing one new data file.
 
@@ -65,6 +68,7 @@ Contributor/agent instructions (build, verify, fidelity policy, research workflo
 - [x] **The Fall of Luna** (Nov 743) — fleet + citadel assault
 - [x] **Siege of Phobos** (Nov–Dec 754) — 13-day station siege
 - [x] Battle selector, clickable characters/places, character-follow mode, off-map character notices
+- [x] Mobile-friendly layout (sticky map + player, slide-up info sheet) and sticky battle log/roster on desktop
 - [x] Published: GitHub Pages auto-deploy + installable PWA (offline-capable)
 - [ ] Unit filtering, casualty graphs over time, phase chapters
 - [ ] Camera pan/zoom on the map
